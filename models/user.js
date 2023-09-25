@@ -37,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      refreshToken: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

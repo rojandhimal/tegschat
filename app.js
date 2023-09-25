@@ -1,10 +1,19 @@
 const express = require('express');
 const path = require('path');
-const sequelize = require('./config/config');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const { sequelize } = require('./models');
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+app.use('/api/v1/auth', authRoutes);
 
 sequelize
   .sync()
