@@ -58,4 +58,18 @@ function onConnected(socket) {
     console.log('feedback', data);
     socket.broadcast.emit('feedback', data);
   });
+
+  socket.on('joinPrivateRoom', (data) => {
+    // Join a private chat room based on the roomId
+    socket.join(data.roomId);
+  });
+
+  socket.on('privateMessage', (data) => {
+    // Send a private message to the specified room
+    console.log('private chat:', data);
+    io.to(data.roomId).emit('privateMessage', {
+      message: data.message,
+      sender: socket.id,
+    });
+  });
 }
