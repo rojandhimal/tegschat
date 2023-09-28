@@ -33,7 +33,7 @@ const apiRegisterUser = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     if (user) {
-      return res.status(200).json({ message: 'User already registered' });
+      return res.status(400).json({ message: 'User already registered' });
     } else {
       // Create a new user
 
