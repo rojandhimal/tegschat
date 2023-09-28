@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Chat_message_media.init(
     {
       chat_message_id: {
-        type: DataTypes.INtEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       media_extendion: {

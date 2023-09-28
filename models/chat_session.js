@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Chat_session extends Model {
     /**
@@ -13,11 +11,28 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Chat_session.init({
-    is_deleted: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'Chat_session',
-  });
+  Chat_session.init(
+    {
+      is_deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: 0,
+      },
+      type: {
+        type: DataTypes.ENUM('PRIVATE', 'PUBLIC', 'CLOSED'),
+        defaultValue: 'PRIVATE',
+      },
+      is_blocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: 0,
+      },
+      blocked_by: {
+        type: DataTypes.INTEGER,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Chat_session',
+    }
+  );
   return Chat_session;
 };
