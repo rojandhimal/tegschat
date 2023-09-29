@@ -1,6 +1,8 @@
 // routes/auth.js
 const express = require('express');
-const { apiFriendRequestController } = require('../controllers/friendrequest');
+const {
+  apiFriendRequestController,
+} = require('../controllers/friendrequest.controller');
 const router = express.Router();
 
 router.get('/all', apiFriendRequestController.apiGetFriendRequests);

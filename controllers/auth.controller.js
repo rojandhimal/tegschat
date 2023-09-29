@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
+const { envVars } = require('../config/envVars');
 
 // NON RENDER CONTROLLER
 const generateRefreshToken = async (user) => {
   // Generate a refresh token with an expiration time of 30 days (in seconds)
-  const token = jwt.sign({ userId: user.id }, 'refreshTokenSecret', {
+  const token = jwt.sign({ userId: user.id }, envVars.JWT_SECRET, {
     expiresIn: '30d',
   });
   return token;
@@ -13,7 +14,8 @@ const generateRefreshToken = async (user) => {
 
 const generateAccessToken = async (user) => {
   // Generate a access token with an expiration time of 1 h (in seconds)
-  const token = jwt.sign({ userId: user.id }, 'your-secret-key', {
+  const secret = envVars.JWT_SECRET;
+  const token = jwt.sign({ userId: user.id }, secret, {
     expiresIn: '1h',
   });
   return token;
