@@ -1,0 +1,6 @@
+exports.EFriendRequestStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  CANCELED: 'CANCELED',
+};

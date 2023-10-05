@@ -1,14 +1,36 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
+require('dotenv').config(); // This loads the environment variables from .env
+const authRoutes = require('./routes/auth');
+const { sequelize } = require('./models');
+const apiRoute = require('./routes');
+
 const app = express();
 const PORT = process.env.PORT || 4000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+app.use('/api/v1', apiRoute);
+
+sequelize
+  .sync()
+  .then(() => {
+    console.log('Database synced and connected');
+  })
+  .catch((err) => {
+    console.error('Error syncing database:', err);
+  });
+
 const server = app.listen(PORT, () => {
   console.log(`Server on port ${PORT}`);
 });
 
 const io = require('socket.io')(server);
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 let socketConnected = new Set();
 io.on('connection', onConnected);
@@ -37,5 +59,19 @@ function onConnected(socket) {
   socket.on('feedback', (data) => {
     console.log('feedback', data);
     socket.broadcast.emit('feedback', data);
+  });
+
+  socket.on('joinPrivateRoom', (data) => {
+    // Join a private chat room based on the roomId
+    socket.join(data.roomId);
+  });
+
+  socket.on('privateMessage', (data) => {
+    // Send a private message to the specified room
+    console.log('private chat:', data);
+    io.to(data.roomId).emit('privateMessage', {
+      message: data.message,
+      sender: socket.id,
+    });
   });
 }
